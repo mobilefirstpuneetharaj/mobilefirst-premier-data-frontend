@@ -1,41 +1,79 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
-
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { useAuthStore } from '../store';
+import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
+import ToastContainer from '../components/ToastContainer';
 
-function ForgotPassword() {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+const ForgotPasswordSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Required'),
+});
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!email.includes('@')) {
-      setError('Enter a valid email');
-    } else {
-      setError('');
-      console.log('Sending OTP to:', email);
-    }
+export default function ForgotPassword() {
+  const { forgotPassword, isLoading, error } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (values: { email: string }) => {
+    await forgotPassword(values.email);
+    // Redirect to OTP verification page with the email
+    navigate('/otp-verification', { 
+      state: { 
+        email: values.email,
+        purpose: 'password-reset' 
+      } 
+    });
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <header className="bg-[#0b2447] py-4 px-8">
-        <img src={logo} alt="Premier Data" className="h-8" />
+        <img src={logo} alt="Logo" className="h-8" />
       </header>
       <main className="flex-grow flex justify-center items-center px-4">
-        <div className="max-w-md w-full border rounded-lg shadow-lg p-8">
-          <img src={logo} alt="Premier Data" className="h-10 mx-auto mb-6" />
-          <h2 className="text-xl font-semibold text-[#0b2447] mb-2">Forgot your password</h2>
-          <p className="text-sm text-gray-500 mb-4">Please enter your registered email address</p>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <input type="email" className="w-full p-3 border rounded" placeholder="Enter your email ID" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <button type="submit" className="w-full py-3 bg-[#0b2447] text-white rounded">Send OTP</button>
-          </form>
+        <div className="w-full max-w-md  rounded-lg shadow-lg p-[50px]">
+          <img src={logo} alt="Logo" className="h-10 mx-auto mb-6" />
+          <h2 className="text-xl font-semibold text-[#0b2447] mb-6">Forgot Password</h2>
+
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+              {error}
+            </div>
+          )}
+
+          <Formik
+            initialValues={{ email: '' }}
+            validationSchema={ForgotPasswordSchema}
+            onSubmit={handleSubmit}
+          >
+            <Form className="space-y-3">
+              <div>
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder="Your email"
+                  className="w-full p-3 border rounded"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`w-full py-3 bg-[#0b2447] text-white rounded ${
+                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+                {isLoading ? 'Sending...' : 'Send OTP'}
+              </button>
+            </Form>
+          </Formik>
         </div>
       </main>
+      <ToastContainer />
     </div>
   );
 }
-
-export default ForgotPassword;

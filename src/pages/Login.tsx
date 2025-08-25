@@ -1,43 +1,116 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
-
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { useAuthStore } from '../store';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import ToastContainer from '../components/ToastContainer';
 import logo from '../assets/logo.png';
 
-function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Required'),
+  password: Yup.string().required('Required'),
+});
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!email.includes('@') || password.length < 6) {
-      setError('Please enter valid credentials');
-    } else {
-      setError('');
-      console.log('Login successful', { email, password });
+export default function Login() {
+  const { login, isAuthenticated, isLoading, error, clearError } = useAuthStore();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(location.state?.from?.pathname || '/dashboard', { replace: true });
     }
-  };
+  }, [isAuthenticated, navigate, location]);
+
+  useEffect(() => {
+    clearError();
+  }, [clearError]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <header className="bg-[#0b2447] py-4 px-8">
-        <img src={logo} alt="Premier Data" className="h-8" />
+        <img src={logo} alt="Logo" className="h-8" />
       </header>
       <main className="flex-grow flex justify-center items-center px-4">
-        <div className="max-w-md w-full border rounded-lg shadow-lg p-8">
-          <img src={logo} alt="Premier Data" className="h-10 mx-auto mb-6" />
+        <div className="w-full max-w-md  rounded-lg shadow-lg p-[50px]">
+          <img src={logo} alt="Logo" className="h-10 mx-auto mb-6" />
           <h2 className="text-xl font-semibold text-[#0b2447] mb-6">Login</h2>
-          {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <input type="email" placeholder="Enter your email ID" className="w-full p-3 border rounded" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="Enter your password" className="w-full p-3 border rounded" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <p className="text-sm text-right text-blue-600 cursor-pointer">Forgot Password ?</p>
-            <button type="submit" className="w-full py-3 bg-[#0b2447] text-white rounded">Submit</button>
-          </form>
+
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+              {error}
+            </div>
+          )}
+
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            validationSchema={LoginSchema}
+            onSubmit={async (values) => {
+              await login(values.email, values.password);
+            }}
+          >
+            <Form className="space-y-4">
+              <div>
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  className="w-full p-3 border rounded"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              <div>
+                <Field
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  className="w-full p-3 border rounded"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <Link 
+                  to="/forgot-password" 
+                  className="text-sm text-blue-600 hover:underline"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`w-full py-3 bg-[#0b2447] text-white rounded ${
+                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+                {isLoading ? 'Logging in...' : 'Login'}
+              </button>
+
+              <div className="text-center mt-4">
+                <span className="text-gray-600">Don't have an account? </span>
+                <Link 
+                  to="/sign-up" 
+                  className="text-blue-600 hover:underline font-medium"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            </Form>
+          </Formik>
         </div>
       </main>
+      <ToastContainer />
     </div>
   );
 }
-
-export default Login;

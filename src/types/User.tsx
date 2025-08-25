@@ -1,9 +1,22 @@
 export interface User {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phone: string;
-  role?: 'admin' | 'user';
+  role: 'admin' | 'user';
   token?: string;
   isVerified?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
+  expiresIn: number;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
 }
