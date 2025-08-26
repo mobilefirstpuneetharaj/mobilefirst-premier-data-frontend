@@ -51,7 +51,7 @@ interface AuthState {
     lastName: string;
     email: string;
     password: string;
-  }) => Promise<void>;
+  }) => Promise<{ success: boolean }>;
   logout: () => void;
   verifyOtp: (email: string, otp: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
@@ -141,18 +141,26 @@ export const useAuthStore = create<AuthState>()(
             throw new Error(data.message || 'Registration failed');
           }
 
-          set({
-            user: data.data.user,
-            token: data.token,
-            isAuthenticated: false,
-            isLoading: false,
-          });
+          // set({
+          //   user: data.data.user,
+          //   token: data.token,
+          //   isAuthenticated: false, // User needs to verify email
+          //   isLoading: false,
+          // });
 
-          toast.success('Registration successful! Please verify your email with the OTP sent.');
+           // Don't set authentication state since we want user to login manually
+          set({ isLoading: false });
+          
+          // toast.success('Registration successful! Please verify your email with the OTP sent.');
+          toast.success(data.message || 'Registration successful! You can now login.');
+
+          return { success: true };
+          
         } catch (err) {
           const error = err as ApiError;
           set({ error: error.message, isLoading: false });
           toast.error(error.message);
+          return { success: false };
         }
       },
 

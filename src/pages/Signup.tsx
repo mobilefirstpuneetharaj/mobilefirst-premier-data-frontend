@@ -56,12 +56,19 @@ export default function Signup() {
             }}
             validationSchema={SignupSchema}
             onSubmit={async (values) => {
-              await register({
+              const result=await register({
                 firstName: values.firstName,
                 lastName: values.lastName,
                 email: values.email,
                 password: values.password,
               });
+
+              // If registration was successful, redirect to login
+              if (result.success) {
+                setTimeout(() => {
+                  navigate('/login');
+                }, 1000); // Redirect after 1 seconds to show success message
+              }
             }}
           >
             <Form className="space-y-3">

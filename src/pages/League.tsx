@@ -1,5 +1,5 @@
-// League.tsx - Updated to integrate with backend API while keeping same styling
-import React, { useMemo, useState, useEffect } from 'react';
+// League.tsx - Fixed version
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -138,6 +138,21 @@ export default function LeaguePage() {
   const seasons = useMemo(() => ['', ...Array.from(new Set(displayLeagues.map((l) => l.season)))], [displayLeagues]);
 
   /* -------------------------
+     Delete handler (simple confirm) - wrapped in useCallback
+     ------------------------- */
+  const handleDelete = useCallback(async (id: string) => {
+    if (!confirm('Are you sure you want to delete this league?')) return;
+    try {
+      await deleteLeague(id);
+      // if we were viewing its detail, go back to list
+      setDetailLeague((d) => (d && d._id === id ? null : d));
+    } catch (error) {
+      // Error is handled by the store
+      console.log(error);
+    }
+  }, [deleteLeague]);
+
+  /* -------------------------
      Filtered + sorted leagues to render in table
      ------------------------- */
   const filtered = useMemo(() => {
@@ -177,12 +192,18 @@ export default function LeaguePage() {
      ------------------------- */
   const handleCreate = async (values: Omit<League, '_id' | 'createdBy' | 'createdAt' | 'updatedAt'>, { resetForm }: { resetForm: () => void }) => {
     try {
-      await createLeague(values);
+      // Generate a temporary ID for the new league
+      const leagueData = {
+        ...values,
+        id: `temp-${Date.now()}`, // Generate a temporary ID
+      };
+      
+      await createLeague(leagueData);
       resetForm();
       setCreateOpen(false);
     } catch (error) {
       // Error is handled by the store
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -198,22 +219,7 @@ export default function LeaguePage() {
       setDetailLeague((d) => (d && d._id === values._id ? values : d));
     } catch (error) {
       // Error is handled by the store
-      console.log(error)
-    }
-  };
-
-  /* -------------------------
-     Delete handler (simple confirm)
-     ------------------------- */
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this league?')) return;
-    try {
-      await deleteLeague(id);
-      // if we were viewing its detail, go back to list
-      setDetailLeague((d) => (d && d._id === id ? null : d));
-    } catch (error) {
-      // Error is handled by the store
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -262,7 +268,7 @@ export default function LeaguePage() {
         </div>
       )
     }));
-  }, [filtered]);
+  }, [filtered, handleDelete]);
 
   /* -------------------------
      Table columns configuration
