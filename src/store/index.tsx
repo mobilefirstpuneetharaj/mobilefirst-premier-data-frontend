@@ -51,7 +51,7 @@ interface AuthState {
     lastName: string;
     email: string;
     password: string;
-  }) => Promise<{ success: boolean }>;
+  }) => Promise<{ success: boolean}>;
   logout: () => void;
   verifyOtp: (email: string, otp: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;

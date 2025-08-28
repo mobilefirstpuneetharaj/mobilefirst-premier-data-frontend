@@ -5,14 +5,17 @@ import { useNavigate,useLocation } from 'react-router-dom';
 import { useState,useEffect } from 'react';
 import logo from '../assets/logo.png';
 
+import { preventSpace } from '../utils/inputHandlers';
+
 const ResetSchema = Yup.object().shape({
   password: Yup.string()
-    .min(8, 'Minimum 8 characters')
-    .matches(/[A-Z]/, 'At least 1 uppercase letter')
-    .matches(/[a-z]/, 'At least 1 lowercase letter')
-    .matches(/\d/, 'At least 1 number')
-    .matches(/[^A-Za-z0-9]/, 'At least 1 special character')
-    .required('Required'),
+      .length(8, 'Minimum 8 characters')
+      .matches(/^\S*$/, 'No spaces allowed') // disallow spaces
+      .matches(/[A-Z]/, 'At least 1 uppercase letter')
+      .matches(/[a-z]/, 'At least 1 lowercase letter')
+      .matches(/\d/, 'At least 1 number')
+      .matches(/[^A-Za-z0-9]/, 'At least 1 special character')
+      .required('Required'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')
     .required('Required'),
@@ -66,6 +69,8 @@ export default function ResetPassword() {
                   type="password"
                   placeholder="New Password"
                   className="w-full p-3 border rounded"
+                  maxLength={8}
+                  onKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="password"

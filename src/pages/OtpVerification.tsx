@@ -5,6 +5,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import logo from '../assets/logo.png';
 
+import { preventSpace } from '../utils/inputHandlers';
+
 const OtpSchema = Yup.object().shape({
   otp: Yup.string().matches(/^\d{6}$/, 'Enter a valid 6-digit code').required('Required'),
 });
@@ -89,6 +91,7 @@ export default function OtpVerification() {
                   placeholder="Enter 6 Digit Code Here"
                   className="w-full p-3 border rounded text-center text-lg"
                   maxLength={6}
+                  oneKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="otp"

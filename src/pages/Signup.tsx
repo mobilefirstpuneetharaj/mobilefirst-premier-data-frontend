@@ -6,11 +6,20 @@ import { useEffect } from 'react';
 import ToastContainer from '../components/ToastContainer';
 import logo from '../assets/logo.png';
 
+import { preventSpace } from '../utils/inputHandlers';
+
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required'),
   lastName: Yup.string().required('Last Name is required'),
   email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string().min(6, 'Minimum 6 characters').required('Required'),
+  password: Yup.string()
+    .length(8, 'Minimum 8 characters')
+    .matches(/^\S*$/, 'No spaces allowed') // disallow spaces
+    .matches(/[A-Z]/, 'At least 1 uppercase letter')
+    .matches(/[a-z]/, 'At least 1 lowercase letter')
+    .matches(/\d/, 'At least 1 number')
+    .matches(/[^A-Za-z0-9]/, 'At least 1 special character')
+    .required('Required'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')
     .required('Required'),
@@ -77,6 +86,7 @@ export default function Signup() {
                   name="firstName"
                   placeholder="First Name"
                   className="w-full p-3 border rounded"
+                  oneKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="firstName"
@@ -90,6 +100,7 @@ export default function Signup() {
                   name="lastName"
                   placeholder="Last Name"
                   className="w-full p-3 border rounded"
+                  oneKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="lastName"
@@ -104,6 +115,7 @@ export default function Signup() {
                   type="email"
                   placeholder="Email"
                   className="w-full p-3 border rounded"
+                  oneKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="email"
@@ -118,6 +130,8 @@ export default function Signup() {
                   type="password"
                   placeholder="Password"
                   className="w-full p-3 border rounded"
+                  maxLength={8}
+                  onKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="password"

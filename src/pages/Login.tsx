@@ -6,10 +6,16 @@ import { useEffect } from 'react';
 import ToastContainer from '../components/ToastContainer';
 import logo from '../assets/logo.png';
 
+import { preventSpace } from '../utils/inputHandlers';
+
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string().required('Required'),
+    password: Yup.string()
+      .length(8, 'Minimum 8 characters')
+      .matches(/^\S*$/, 'No spaces allowed') // disallow spaces
+      .required('Required'),
 });
+
 
 export default function Login() {
   const { login, isAuthenticated, isLoading, error, clearError } = useAuthStore();
@@ -56,6 +62,7 @@ export default function Login() {
                   type="email"
                   placeholder="Email"
                   className="w-full p-3 border rounded"
+                  oneKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="email"
@@ -70,6 +77,8 @@ export default function Login() {
                   type="password"
                   placeholder="Password"
                   className="w-full p-3 border rounded"
+                  maxLength={8}
+                  onKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="password"

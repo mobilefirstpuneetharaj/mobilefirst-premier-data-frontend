@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import ToastContainer from '../components/ToastContainer';
 
+import { preventSpace } from '../utils/inputHandlers';
+
 const ForgotPasswordSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
 });
@@ -52,6 +54,7 @@ export default function ForgotPassword() {
                   type="email"
                   placeholder="Your email"
                   className="w-full p-3 border rounded"
+                  oneKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="email"
