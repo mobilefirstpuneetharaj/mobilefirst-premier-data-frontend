@@ -380,7 +380,7 @@ export default function ClubsPage() {
             className="w-[104px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            title="Sort Clubs By"
+            title="Sort Clubs By" 
           >
             <option value="">Sort By</option>
             <option value="name-asc">Name (A-Z)</option>
