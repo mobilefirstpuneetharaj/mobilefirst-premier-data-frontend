@@ -57,7 +57,8 @@ export default function TeamsPage() {
   const [seasonFilter, setSeasonFilter] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [detailTeam, setDetailTeam] = useState<Team | null>(null);
-  const [showPlayers, setShowPlayers] = useState(false);
+  // const [showPlayers, setShowPlayers] = useState(false);
+  const [showPlayers] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [editingTeam, setEditingTeam] = useState<Team | null>(null);
   const [teams, setTeams] = useState<Team[]>(initialTeams);
@@ -73,8 +74,10 @@ export default function TeamsPage() {
       );
     }
     if (competitionFilter) results = results.filter(t => t.competition === competitionFilter);
-    if (seasonFilter) results = results.filter(t => true); // Add actual season filtering logic when you have the data
-    
+    // if (seasonFilter) results = results.filter(t => true); // Add actual season filtering logic when you have the data
+    if (seasonFilter) results = results.filter(() => true); // placeholder until season filtering logic is added
+
+
     // Sorting logic
     results.sort((a, b) => {
       switch (sortBy) {

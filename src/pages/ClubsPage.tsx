@@ -74,7 +74,8 @@ export default function ClubsPage() {
   const [isEditOpen, setEditOpen] = useState(false);
   const [editingClub, setEditingClub] = useState<Club | null>(null);
   const [clubs, setClubs] = useState<Club[]>(initialClubs);
-  const [teams, setTeams] = useState<Team[]>(initialTeams);
+  // const [teams, setTeams] = useState<Team[]>(initialTeams);
+  const [teams] = useState<Team[]>(initialTeams);
 
   // Sample data for dropdowns
   const countries = ['North West England', 'London', 'Liverpool'];
@@ -226,6 +227,7 @@ export default function ClubsPage() {
               className="w-[120px.14px] h-[48.46px] p-2 border border-gray-300 rounded-lg text-sm"
               value={gradeFilter}
               onChange={(e) => setGradeFilter(e.target.value)}
+              title="Filter by Grade"
             >
               <option value="">Select Grade</option>
               {grades.map(grade => (
@@ -236,6 +238,7 @@ export default function ClubsPage() {
               className="w-[104.14px] h-[48.46px] p-2 border border-gray-300 rounded-lg text-sm"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
+              title="Sort Teams By"
             >
               <option value="">Sort By</option>
               <option value="name-asc">Name (A-Z)</option>
@@ -333,6 +336,7 @@ export default function ClubsPage() {
             className="w-[108px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
             value={clubFilter}
             onChange={(e) => setClubFilter(e.target.value)}
+            title="Filter by Club"
           >
             <option value="">Select Club</option>
             {clubs.map(club => (
@@ -343,6 +347,7 @@ export default function ClubsPage() {
             className="w-[153.14px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
             value={competitionFilter}
             onChange={(e) => setCompetitionFilter(e.target.value)}
+            title="Filter by Competition"
           >
             <option value="">Select Competition</option>
             {competitions.map(comp => (
@@ -353,6 +358,7 @@ export default function ClubsPage() {
             className="w-[125.14px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
             value={countryFilter}
             onChange={(e) => setCountryFilter(e.target.value)}
+            title="Filter by Country"
           >
             <option value="">Select Country</option>
             {countries.map(country => (
@@ -363,6 +369,7 @@ export default function ClubsPage() {
             className="w-[125.14px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
             value={seasonFilter}
             onChange={(e) => setSeasonFilter(e.target.value)}
+            title="Filter by Season"
           >
             <option value="">Select Season</option>
             {seasons.map(season => (
@@ -373,6 +380,7 @@ export default function ClubsPage() {
             className="w-[104px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
+            title="Sort Clubs By"
           >
             <option value="">Sort By</option>
             <option value="name-asc">Name (A-Z)</option>

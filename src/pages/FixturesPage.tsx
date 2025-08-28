@@ -1,7 +1,17 @@
 import React, { useMemo, useState } from 'react';
-import { FaSearch, FaPlus } from 'react-icons/fa';
+import { FaSearch} from 'react-icons/fa';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+
+// 1. Define a type for form values
+interface ScheduleFormValues {
+  roundNo: string;
+  homeTeam: string;
+  awayTeam: string;
+  competition: string;
+  date: string;
+  time: string;
+}
 
 type Fixture = {
   id: string;
@@ -63,7 +73,7 @@ export default function FixturesPage() {
   const [query, setQuery] = useState('');
   const [matchFilter, setMatchFilter] = useState('');
   const [competitionFilter, setCompetitionFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  // const [statusFilter, setStatusFilter] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [isScheduleOpen, setScheduleOpen] = useState(false);
   const [isAssignOpen, setAssignOpen] = useState(false);
@@ -72,7 +82,7 @@ export default function FixturesPage() {
   // Sample data for dropdowns
   const matches = ['Manchester United vs XYZ', 'Liverpool vs ABC', 'Chelsea vs DEF'];
   const competitions = ['Premier League', 'Championship', 'FA Cup'];
-  const statuses = ['Not Started', 'In Progress', 'Completed'];
+  // const statuses = ['Not Started', 'In Progress', 'Completed'];
   const teams = ['Manchester United', 'Liverpool', 'Chelsea', 'XYZ', 'ABC', 'DEF'];
   const categories = ['Category 1', 'Category 2', 'Category 3'];
   const analysts = ['Analyst 1', 'Analyst 2', 'Analyst 3'];
@@ -89,7 +99,7 @@ export default function FixturesPage() {
     }
     if (matchFilter) results = results.filter(f => f.match === matchFilter);
     if (competitionFilter) results = results.filter(f => f.competition === competitionFilter);
-    if (statusFilter) results = results.filter(f => f.status === statusFilter);
+    // if (statusFilter) results = results.filter(f => f.status === statusFilter);
     
     // Sorting logic
     results.sort((a, b) => {
@@ -102,9 +112,9 @@ export default function FixturesPage() {
       }
     });
     return results;
-  }, [fixtures, query, matchFilter, competitionFilter, statusFilter, sortBy]);
+  }, [fixtures, query, matchFilter, competitionFilter, sortBy]);  // removed statusFilter dep
 
-  const handleSchedule = (values: any) => {
+  const handleSchedule = (values: ScheduleFormValues) => {
     const newFixture = {
       id: `00${fixtures.length + 1}`,
       roundNo: values.roundNo,
@@ -119,8 +129,9 @@ export default function FixturesPage() {
     setScheduleOpen(false);
   };
 
-  const handleAssign = (values: any) => {
+  const handleAssign = () => {
     // Handle analyst assignment logic
+    // simplified: removed unused "values" param
     setAssignOpen(false);
   };
 
@@ -151,6 +162,7 @@ export default function FixturesPage() {
             className="w-[120.14px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
             value={matchFilter}
             onChange={(e) => setMatchFilter(e.target.value)}
+            title="Filter by Match"
           >
             <option value="">Select Match</option>
             {matches.map(match => (
@@ -161,6 +173,7 @@ export default function FixturesPage() {
             className="w-[153.14px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
             value={competitionFilter}
             onChange={(e) => setCompetitionFilter(e.target.value)}
+            title="Filter by Competition"
           >
             <option value="">Select Competition</option>
             {competitions.map(comp => (
@@ -171,6 +184,7 @@ export default function FixturesPage() {
             className="w-[90px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
+            title="Sort By"
           >
             <option value="">Sort By</option>
             <option value="date-asc">Date (Oldest)</option>
@@ -356,7 +370,8 @@ export default function FixturesPage() {
             homeAnalyst: '',
             awayAnalyst: ''
           }}
-          onSubmit={(values) => handleAssign(values)}
+          // onSubmit={(values) => handleAssign(values)}
+          onSubmit={() => handleAssign()} // removed 'values' argument to deploy
         >
           <Form className="space-y-4">
             <div>

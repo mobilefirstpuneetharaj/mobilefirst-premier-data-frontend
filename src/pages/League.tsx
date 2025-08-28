@@ -12,7 +12,7 @@ import { useAuthStore } from '../store';
    ------------------------- */
 type League = {
   _id: string;
-  id: string;
+  // id: string;
   name: string;
   country: string;
   season: string;
@@ -30,7 +30,7 @@ type League = {
 const initialLeagues: League[] = [
   {
     _id: '1',
-    id: '01',
+    // id: '01',
     name: 'Alberta Australian Football 2024',
     country: 'England',
     season: '2024',
@@ -43,7 +43,7 @@ const initialLeagues: League[] = [
   },
   {
     _id: '2',
-    id: '02',
+    // id: '02',
     name: 'Alberta Australian Football 2023',
     country: 'England',
     season: '2023',
@@ -66,10 +66,16 @@ function Modal({ open, title, onClose, children }: { open: boolean; title?: stri
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* backdrop */}
       <div className="absolute inset-0 bg-black opacity-40" onClick={onClose} />
-      {/* modal box */}
-      <div className="relative bg-white rounded-lg shadow-lg w-full max-w-lg p-6 z-10">
-        {title && <h3 className="text-lg font-semibold mb-4">{title}</h3>}
-        {children}
+      {/* modal box - updated with specific width */}
+      <div className="relative bg-white rounded-lg shadow-lg w-[526px] max-h-[80vh] overflow-hidden flex flex-col z-10">
+        {title && (
+          <div className="px-6 py-3 border-b border-gray-200">
+            <h3 className="text-lg font-semibold">{title}</h3>
+          </div>
+        )}
+        <div className="p-4 overflow-y-auto">
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -161,7 +167,7 @@ export default function LeaguePage() {
     // search by name or id (case-insensitive)
     if (query.trim()) {
       const q = query.toLowerCase();
-      results = results.filter((l) => l.name.toLowerCase().includes(q) || (l.id && l.id.toLowerCase().includes(q)));
+      results = results.filter((l) => l.name.toLowerCase().includes(q) || (l._id && l._id.toLowerCase().includes(q)));
     }
 
     // country filter
@@ -180,7 +186,7 @@ export default function LeaguePage() {
         case 'status':
           return a.status.localeCompare(b.status);
         default:
-          return (a.id || a._id).localeCompare(b.id || b._id);
+          return (a._id || a._id).localeCompare(b._id || b._id);
       }
     });
 
@@ -230,7 +236,7 @@ export default function LeaguePage() {
     return filtered.map(league => ({
       ...league,
       // Use id field for display (fallback to _id if id doesn't exist)
-      id: league.id || league._id,
+      id: league._id || league._id,
       // Format status with colored badge
       status: (
         <span className={`px-2 py-1 rounded text-xs ${
@@ -287,7 +293,7 @@ export default function LeaguePage() {
      ------------------------- */
   const handleRowClick = (row: League) => {
     // Find the original league object (without the JSX formatting we added for the table)
-    const originalLeague = filtered.find(l => (l.id || l._id) === row.id);
+    const originalLeague = filtered.find(l => (l._id || l._id) === row._id);
     if (originalLeague) setDetailLeague(originalLeague);
   };
 
@@ -320,7 +326,7 @@ export default function LeaguePage() {
         </div>
 
         <div className="bg-white rounded-lg p-6 shadow">
-          <p className="mb-2"><strong>ID:</strong> {detailLeague.id || detailLeague._id}</p>
+          <p className="mb-2"><strong>ID:</strong> {detailLeague._id || detailLeague._id}</p>
           <p className="mb-2"><strong>Country:</strong> {detailLeague.country}</p>
           <p className="mb-2"><strong>Season:</strong> {detailLeague.season}</p>
           <p className="mb-2"><strong>No. of Competitions:</strong> {detailLeague.competitionsCount}</p>
@@ -339,42 +345,60 @@ export default function LeaguePage() {
               validationSchema={LeagueSchema}
               onSubmit={(values) => handleUpdate(values as League)}
             >
-              <Form className="space-y-3">
-                <div>
-                  <label className="block text-xs text-gray-600">ID</label>
-                  <Field 
-                    name="id" 
-                    readOnly 
-                    value={editingLeague.id || editingLeague._id}
-                    className="w-full p-2 rounded bg-gray-100 border border-[#C7C7C7] border-opacity-100"
-                  />
+              <Form className="space-y-2 max-h-[70vh] overflow-y-auto">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs text-gray-600">ID</label>
+                    <Field 
+                      name="id" 
+                      readOnly 
+                      value={editingLeague._id || editingLeague._id}
+                      className="w-full p-1.5 text-sm rounded bg-gray-100 border border-[#C7C7C7] border-opacity-100"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs text-gray-600">Status</label>
+                    <Field 
+                      as="select" 
+                      name="status" 
+                      className="w-full p-1.5 text-sm rounded border border-[#C7C7C7] border-opacity-100"
+                    >
+                      <option value="Active">Active</option>
+                      <option value="Ongoing">Ongoing</option>
+                      <option value="Complete">Complete</option>
+                      <option value="Draft">Draft</option>
+                    </Field>
+                  </div>
                 </div>
 
                 <div>
                   <label className="block text-xs text-gray-600">League Name</label>
                   <Field 
                     name="name" 
-                    className="w-full p-2 rounded border border-[#C7C7C7] border-opacity-100"
+                    className="w-full p-1.5 text-sm rounded border border-[#C7C7C7] border-opacity-100"
                   />
                   <div className="text-red-500 text-xs"><ErrorMessage name="name" /></div>
                 </div>
 
-                <div>
-                  <label className="block text-xs text-gray-600">Country</label>
-                  <Field 
-                    name="country" 
-                    className="w-full p-2 rounded border border-[#C7C7C7] border-opacity-100"
-                  />
-                  <div className="text-red-500 text-xs"><ErrorMessage name="country" /></div>
-                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs text-gray-600">Country</label>
+                    <Field 
+                      name="country" 
+                      className="w-full p-1.5 text-sm rounded border border-[#C7C7C7] border-opacity-100"
+                    />
+                    <div className="text-red-500 text-xs"><ErrorMessage name="country" /></div>
+                  </div>
 
-                <div>
-                  <label className="block text-xs text-gray-600">Season</label>
-                  <Field 
-                    name="season" 
-                    className="w-full p-2 rounded border border-[#C7C7C7] border-opacity-100"
-                  />
-                  <div className="text-red-500 text-xs"><ErrorMessage name="season" /></div>
+                  <div>
+                    <label className="block text-xs text-gray-600">Season</label>
+                    <Field 
+                      name="season" 
+                      className="w-full p-1.5 text-sm rounded border border-[#C7C7C7] border-opacity-100"
+                    />
+                    <div className="text-red-500 text-xs"><ErrorMessage name="season" /></div>
+                  </div>
                 </div>
 
                 <div>
@@ -382,23 +406,9 @@ export default function LeaguePage() {
                   <Field 
                     name="competitionsCount" 
                     type="number" 
-                    className="w-full p-2 rounded border border-[#C7C7C7] border-opacity-100"
+                    className="w-full p-1.5 text-sm rounded border border-[#C7C7C7] border-opacity-100"
                   />
                   <div className="text-red-500 text-xs"><ErrorMessage name="competitionsCount" /></div>
-                </div>
-
-                <div>
-                  <label className="block text-xs text-gray-600">Status</label>
-                  <Field 
-                    as="select" 
-                    name="status" 
-                    className="w-full p-2 rounded border border-[#C7C7C7] border-opacity-100"
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Ongoing">Ongoing</option>
-                    <option value="Complete">Complete</option>
-                    <option value="Draft">Draft</option>
-                  </Field>
                 </div>
 
                 <div>
@@ -406,25 +416,25 @@ export default function LeaguePage() {
                   <Field 
                     as="textarea" 
                     name="description" 
-                    className="w-full p-2 rounded border border-[#C7C7C7] border-opacity-100" 
-                    rows={3}
+                    className="w-full p-1.5 text-sm rounded border border-[#C7C7C7] border-opacity-100" 
+                    rows={2}
                   />
                 </div>
 
-                <div className="flex justify-end gap-2">
+                <div className="flex justify-end gap-2 pt-2">
                   <button 
                     type="button" 
                     onClick={() => { setEditOpen(false); setEditingLeague(null); }} 
-                    className="px-4 py-2 rounded border border-[#C7C7C7] border-opacity-100"
+                    className="px-3 py-1.5 text-sm rounded border border-[#C7C7C7] border-opacity-100"
                   >
                     Cancel
                   </button>
                   <button 
                     type="submit" 
                     disabled={isLeagueLoading}
-                    className={`px-4 py-2 bg-[#0b2447] text-white rounded ${isLeagueLoading ? 'opacity-50' : ''}`}
+                    className={`px-3 py-1.5 text-sm bg-[#0b2447] text-white rounded ${isLeagueLoading ? 'opacity-50' : ''}`}
                   >
-                    {isLeagueLoading ? 'Updating...' : 'Update League'}
+                    {isLeagueLoading ? 'Updating...' : 'Update'}
                   </button>
                 </div>
               </Form>

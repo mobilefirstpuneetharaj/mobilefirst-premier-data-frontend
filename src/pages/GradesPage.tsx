@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import  { useMemo, useState } from 'react';
 import { FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 
 type Grade = {
@@ -90,6 +90,7 @@ export default function GradesPage() {
             className="w-[90.14px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
+            title="Sort Grades By"
           >
             <option value="">Sort By</option>
             <option value="name-asc">Name (A-Z)</option>
@@ -111,7 +112,7 @@ export default function GradesPage() {
             {filteredGrades.map((grade) => (
               <tr key={grade.id} className="h-[83.16px] border-b border-gray-200 hover:bg-gray-50">
                 <td className="py-3 px-4">
-                  <div className="font-medium text-[22.55px] font-[600]">{grade.name}</div>
+                  <div className="font-medium text-[22.55px] ">{grade.name}</div>
                 </td>
                 <td className="py-3 px-4">{grade.description}</td>
                 <td className="py-3 px-4 text-center">

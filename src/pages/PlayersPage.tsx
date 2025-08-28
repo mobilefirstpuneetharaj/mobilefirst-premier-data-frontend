@@ -51,10 +51,10 @@ const initialPlayers: Player[] = [
   }
 ];
 
-const teamsData: Team[] = [
-  { id: '001', name: 'Manchester United FC', grade: 'Under 18' },
-  { id: '002', name: 'Manchester United FC', grade: 'Under 18' }
-];
+// const teamsData: Team[] = [
+//   { id: '001', name: 'Manchester United FC', grade: 'Under 18' },
+//   { id: '002', name: 'Manchester United FC', grade: 'Under 18' }
+// ];
 
 const PlayerSchema = Yup.object().shape({
   id: Yup.string().required('ID is required'),
@@ -221,6 +221,7 @@ export default function PlayersPage() {
               className="w-[125.14px] h-[48.46px] p-2 border border-gray-300 rounded-lg text-sm"
               value={teamFilter}
               onChange={(e) => setTeamFilter(e.target.value)}
+              title="Filter by Team"
             >
               <option value="">Select Team</option>
               {teams.map(team => (
@@ -231,6 +232,7 @@ export default function PlayersPage() {
               className="w-[120.14px] h-[48.46px] p-2 border border-gray-300 rounded-lg text-sm"
               value={gradeFilter}
               onChange={(e) => setGradeFilter(e.target.value)}
+              title="Filter by Grade"
             >
               <option value="">Select Grade</option>
               {grades.map(grade => (
@@ -242,6 +244,7 @@ export default function PlayersPage() {
               className="w-[115.14px] h-[48.46px] p-2 border border-gray-300 rounded-lg text-sm "
               value={clubFilter}
               onChange={(e) => setClubFilter(e.target.value)}
+              title="Filter by Club"
             >
               <option value="">Select Club</option>
               {clubs.map(club => (
@@ -252,6 +255,7 @@ export default function PlayersPage() {
               className="w-[104.14px] h-[48.46px] p-2 border border-gray-300 rounded-lg text-sm"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
+              title="Sort Players By"
             >
               <option value="">Sort By</option>
               <option value="name-asc">Name (A-Z)</option>
@@ -618,6 +622,7 @@ export default function PlayersPage() {
               value={teamFilter}
               onChange={(e) => setTeamFilter(e.target.value)}
               className="w-[110.14px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
+              title="Filter by Team"
             >
               <option value="">Select Team</option>
               {teams.map(team => (
@@ -630,6 +635,7 @@ export default function PlayersPage() {
               value={gradeFilter}
               onChange={(e) => setGradeFilter(e.target.value)}
               className="w-[115.14px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
+              title="Filter by Grade"
             >
               <option value="">Select Grade</option>
               {grades.map(grade => (
@@ -641,7 +647,8 @@ export default function PlayersPage() {
             <select
               value={seasonFilter}
               onChange={(e) => setSeasonFilter(e.target.value)}
-              className="w-w-[115.14px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
+              className="w-w-[115.14px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm" 
+              title="Filter by Season"
             >
               <option value="">Select Season</option>
               {seasons.map(season => (
@@ -654,6 +661,7 @@ export default function PlayersPage() {
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="w-[104px] h-[48.46px] p-2 rounded-lg border border-gray-300 text-sm"
+              title="Sort Players By"
             >
               <option value="">Sort By</option>
               <option value="name-asc">Name (A-Z)</option>
