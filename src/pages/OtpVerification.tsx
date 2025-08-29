@@ -41,7 +41,7 @@ export default function OtpVerification() {
   const handleSubmit = async (values: { otp: string }) => {
     if (purpose === 'password-reset') {
       const result=await verifyResetOtp(email, values.otp);
-      if(result && result.success){
+      if(result && result.success){ // // same as if(result === true && result.sucess===true){}
         navigate('/reset-password', { state: { email } });
       }
     }
