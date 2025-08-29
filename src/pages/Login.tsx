@@ -62,7 +62,7 @@ export default function Login() {
                   type="email"
                   placeholder="Email"
                   className="w-full p-3 border rounded"
-                  oneKeyDown={preventSpace}
+                  onKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="email"
