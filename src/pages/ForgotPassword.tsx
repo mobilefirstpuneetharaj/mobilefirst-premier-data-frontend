@@ -54,7 +54,7 @@ export default function ForgotPassword() {
                   type="email"
                   placeholder="Your email"
                   className="w-full p-3 border rounded"
-                  oneKeyDown={preventSpace}
+                   onKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="email"

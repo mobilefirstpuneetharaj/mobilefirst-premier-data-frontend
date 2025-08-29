@@ -86,7 +86,7 @@ export default function Signup() {
                   name="firstName"
                   placeholder="First Name"
                   className="w-full p-3 border rounded"
-                  oneKeyDown={preventSpace}
+                   onKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="firstName"
@@ -100,7 +100,7 @@ export default function Signup() {
                   name="lastName"
                   placeholder="Last Name"
                   className="w-full p-3 border rounded"
-                  oneKeyDown={preventSpace}
+                  onKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="lastName"
@@ -115,7 +115,7 @@ export default function Signup() {
                   type="email"
                   placeholder="Email"
                   className="w-full p-3 border rounded"
-                  oneKeyDown={preventSpace}
+                   onKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="email"
