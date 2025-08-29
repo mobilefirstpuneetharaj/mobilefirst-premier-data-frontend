@@ -40,8 +40,10 @@ export default function OtpVerification() {
 
   const handleSubmit = async (values: { otp: string }) => {
     if (purpose === 'password-reset') {
-      await verifyResetOtp(email, values.otp);
-      navigate('/reset-password', { state: { email } });
+      const result=await verifyResetOtp(email, values.otp);
+      if(result && result.success){
+        navigate('/reset-password', { state: { email } });
+      }
     }
   };
 
@@ -91,7 +93,7 @@ export default function OtpVerification() {
                   placeholder="Enter 6 Digit Code Here"
                   className="w-full p-3 border rounded text-center text-lg"
                   maxLength={6}
-                  oneKeyDown={preventSpace}
+                  onKeyDown={preventSpace}
                 />
                 <ErrorMessage
                   name="otp"

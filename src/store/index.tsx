@@ -56,7 +56,7 @@ interface AuthState {
   verifyOtp: (email: string, otp: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resendOtp: (email: string) => Promise<void>;
-  verifyResetOtp: (email: string, otp: string) => Promise<void>;
+  verifyResetOtp: (email: string, otp: string) => Promise<{ success: boolean}>;
   resetPassword: (email: string, newPassword: string) => Promise<void>;
   clearError: () => void;
 
@@ -247,6 +247,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
+      // verifyResetOtp action
       verifyResetOtp: async (email, otp) => {
         set({ isLoading: true });
         try {
@@ -266,10 +267,12 @@ export const useAuthStore = create<AuthState>()(
 
           set({ isLoading: false });
           toast.success('OTP verified successfully!');
+          return { success: true }; // Return success status
         } catch (err) {
           const error = err as ApiError;
           set({ error: error.message, isLoading: false });
           toast.error(error.message);
+          return { success: false, error: error.message }; // Return failure status
         }
       },
 
