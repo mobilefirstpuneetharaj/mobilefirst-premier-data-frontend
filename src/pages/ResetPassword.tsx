@@ -1,11 +1,12 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form} from 'formik';
 import * as Yup from 'yup';
 import { useAuthStore } from '../store';
 import { useNavigate,useLocation } from 'react-router-dom';
 import { useState,useEffect } from 'react';
 import logo from '../assets/logo.png';
 
-import { preventSpace } from '../utils/inputHandlers';
+
+import PasswordInput from '../components/PasswordInput'
 
 const ResetSchema = Yup.object().shape({
   password: Yup.string()
@@ -63,21 +64,7 @@ export default function ResetPassword() {
             onSubmit={handleSubmit}
           >
             <Form className="space-y-4">
-              <div>
-                <Field
-                  name="password"
-                  type="password"
-                  placeholder="New Password"
-                  className="w-full p-3 border rounded"
-                  maxLength={8}
-                  onKeyDown={preventSpace}
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+              <PasswordInput name='password' placeholder='password' maxLength={8} />
 
               <div className="text-sm text-gray-500 mb-4">
                 Password requirements:
@@ -90,19 +77,7 @@ export default function ResetPassword() {
                 </ul>
               </div>
 
-              <div>
-                <Field
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="Confirm Password"
-                  className="w-full p-3 border rounded"
-                />
-                <ErrorMessage
-                  name="confirmPassword"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+              <PasswordInput name="confirmPassword" placeholder="Confirm Password" />
 
               <button
                 type="submit"

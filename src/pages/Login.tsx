@@ -8,6 +8,8 @@ import logo from '../assets/logo.png';
 
 import { preventSpace } from '../utils/inputHandlers';
 
+import PasswordInput from '../components/PasswordInput'
+
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
     password: Yup.string()
@@ -71,21 +73,7 @@ export default function Login() {
                 />
               </div>
 
-              <div>
-                <Field
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  className="w-full p-3 border rounded"
-                  maxLength={8}
-                  onKeyDown={preventSpace}
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
+              <PasswordInput name='password' placeholder='password' maxLength={8} />
 
               <div className="flex justify-end">
                 <Link 

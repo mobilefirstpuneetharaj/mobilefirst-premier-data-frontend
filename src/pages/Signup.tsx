@@ -8,6 +8,8 @@ import logo from '../assets/logo.png';
 
 import { preventSpace } from '../utils/inputHandlers';
 
+import PasswordInput from '../components/PasswordInput'
+
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required'),
   lastName: Yup.string().required('Last Name is required'),
@@ -124,35 +126,9 @@ export default function Signup() {
                 />
               </div>
 
-              <div>
-                <Field
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  className="w-full p-3 border rounded"
-                  maxLength={8}
-                  onKeyDown={preventSpace}
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+              <PasswordInput name='password' placeholder='password' maxLength={8} />
 
-              <div>
-                <Field
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="Confirm Password"
-                  className="w-full p-3 border rounded"
-                />
-                <ErrorMessage
-                  name="confirmPassword"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+              <PasswordInput name="confirmPassword" placeholder="Confirm Password" />
 
               <button
                 type="submit"
