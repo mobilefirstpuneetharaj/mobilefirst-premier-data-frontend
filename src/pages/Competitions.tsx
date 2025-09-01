@@ -405,7 +405,7 @@ export default function CompetitionsPage() {
               <option>Select Team</option>
               <option>Manchester United FC</option>
             </select>
-            <select className="p-2 border border-gray-300 rounded-lg text-sm w-40" aria-label="Select Grade">
+            <select className="p-2 border border-gray-300 rounded-lg text-sm w-40" aria-label="Select Grade" >
               <option>Select Grade</option>
               <option>Under 18</option>
             </select>
@@ -440,13 +440,13 @@ export default function CompetitionsPage() {
                       {fixture.status}
                     </span>
                   </td>
-                  <td className="py-3 px-4">
-                    <span className="px-2 py-1 rounded-md text-xs bg-[#EF4B41] text-white font-medium">
+                  <td className="py-3 px-3">
+                    <span className="px-1 py-1 rounded-md text-xs bg-[#EF4B41] text-white font-small">
                       {fixture.analyst}
                     </span>
                   </td>
-                  <td className="py-3 px-4">
-                    <span className="px-2 py-1 rounded-[53.47px] text-xs bg-[#FFC300]">
+                  <td>
+                    <span className="px-1 py-1 rounded-md text-xs  font-sm bg-[#FFC300]">
                       {fixture.status}
                     </span>
                   </td>
