@@ -5,7 +5,6 @@ import { useNavigate,useLocation } from 'react-router-dom';
 import { useState,useEffect } from 'react';
 import logo from '../assets/logo.png';
 
-
 import PasswordInput from '../components/PasswordInput'
 
 const ResetSchema = Yup.object().shape({
